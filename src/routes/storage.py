@@ -6,11 +6,13 @@ import uuid
 from datetime import datetime, timedelta
 from fastapi import APIRouter, Depends, HTTPException
 import httpx
-
+from fastapi.responses import FileResponse
 router = APIRouter()
 
 @router.post("/v1/upload")
-async def upload_file(api_key_hash: str, file: UploadFile = File(...)):
+# async def upload_file(api_key_hash: str, file: UploadFile = File(...)):
+async def upload_file(file: UploadFile = File(...)):
+    print("we are inside the upload file api")
     os.makedirs("./uploads", exist_ok=True)
     file_path = f"./uploads/{datetime.now().timestamp()}_{file.filename}"
     
@@ -26,4 +28,6 @@ async def upload_file(api_key_hash: str, file: UploadFile = File(...)):
 
 @router.get("/v1/files/{filename}")
 async def get_file(filename: str):
+    print("we are inside the get files")
+    print(filename)
     return FileResponse(f"./uploads/{filename}")
