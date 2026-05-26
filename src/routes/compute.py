@@ -8,12 +8,23 @@ from fastapi import APIRouter, Depends, HTTPException
 import httpx
 
 router = APIRouter()
+from pydantic import BaseModel
+
+class RunCodeRequest(BaseModel):
+    code: str
+    language: str = "python"
 
 @router.post("/v1/run")
-async def run_code(code: str = None, language: str = "python"):
+async def run_code(request: RunCodeRequest):
+    code = request.code 
+    language = request.language
+    # print("we are inside the run code")
+    # print(code)
+    # print(language)
     if not code:
+        
         raise HTTPException(400, "No code provided")
-    
+    print(code)
     if language == "python":
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
             f.write(code)
