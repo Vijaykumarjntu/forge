@@ -9,13 +9,28 @@ from fastapi import FastAPI, HTTPException, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
 import httpx
+# Import the route modules
+# from routes.chat import router as chat_router
+# from routes.databases import router as databases_router
+# from routes.storage import router as storage_router
+# from routes.compute import router as compute_router
+# from src.routes.chat import router as chat_router
+from src.routes.databases import router as databases_router
+from src.routes.storage import router as storage_router
+from src.routes.compute import router as compute_router
+
 from dotenv import load_dotenv
+
 
 load_dotenv()
 
 app = FastAPI(title="Mini AI Gateway", version="0.1")
 security = HTTPBearer()
-
+# Register routes
+# app.include_router(chat_router)
+app.include_router(databases_router)
+app.include_router(storage_router)
+app.include_router(compute_router)
 # ----- SQLite setup -----
 DB_PATH = "gateway.db"
 
